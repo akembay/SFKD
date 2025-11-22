@@ -12,7 +12,7 @@ def normalize(logit):
 
 
 def dkd_loss(logits_student, logits_teacher, target, alpha, beta, temperature, topk_percent=0.5, logit_stand=False):
-    # Apply logit standardization if enabled
+    # Apply logit standardization 
     if logit_stand:
         logits_student = normalize(logits_student)
         logits_teacher = normalize(logits_teacher)
@@ -33,9 +33,8 @@ def dkd_loss(logits_student, logits_teacher, target, alpha, beta, temperature, t
     pred_teacher = cat_mask(pred_teacher, gt_mask, other_mask)
     log_pred_student = torch.log(pred_student)
     tckd_loss = (
-        F.kl_div(log_pred_student, pred_teacher, size_average=False)
+        F.kl_div(log_pred_student, pred_teacher, reduction='batchmean')
         * (temperature**2)
-        / target.shape[0]
     )
     pred_teacher_part2 = F.softmax(
         logits_teacher / temperature - 1000.0 * gt_mask, dim=1
@@ -44,9 +43,8 @@ def dkd_loss(logits_student, logits_teacher, target, alpha, beta, temperature, t
         logits_student / temperature - 1000.0 * gt_mask, dim=1
     )
     nckd_loss = (
-        F.kl_div(log_pred_student_part2, pred_teacher_part2, size_average=False)
+        F.kl_div(log_pred_student_part2, pred_teacher_part2, reduction='batchmean')
         * (temperature**2)
-        / target.shape[0]
     )
     return alpha * tckd_loss + beta * nckd_loss
 
