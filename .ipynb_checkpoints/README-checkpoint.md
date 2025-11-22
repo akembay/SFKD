@@ -23,7 +23,7 @@ CUDA_VISIBLE_DEVICES=0 python tools/train.py --cfg configs/cifar100/dkd/vgg13_vg
 # Train RLD
 CUDA_VISIBLE_DEVICES=0 python tools/train.py --cfg configs/cifar100/rld/vgg13_vgg8.yaml --same-t RLD.ALPHA 1. RLD.BETA 8. RLD.T 4.
 # Train DKD-SFKD
-CUDA_VISIBLE_DEVICES=0 python tools/train.py --cfg configs/cifar100/dkd_sfkd/dkdSFKD_vgg13_vgg8.yaml --logit-stand --kd-weight 9 --base-temp 2 --topk 0.7
+CUDA_VISIBLE_DEVICES=0 python tools/train.py --cfg configs/cifar100/dkd_sfkd/dkdSFKD_vgg13_vgg8.yaml --logit-stand --kd-weight 5 --base-temp 2 --topk 0.7
 
 ```
 
